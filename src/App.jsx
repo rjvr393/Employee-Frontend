@@ -6,18 +6,23 @@ import './App.css'; // Add this CSS for styling
 const App = () => {
   const [employees, setEmployees] = useState([]);
 
+  // Backend URL
+  const backendUrl = 'https://backend-eiub.onrender.com/api/employees';
+
+  // Fetch employees from the backend
   useEffect(() => {
     fetchEmployees();
   }, []);
 
   const fetchEmployees = async () => {
-    const response = await fetch('http://localhost:5000/api/employees');
+    const response = await fetch(backendUrl);
     const data = await response.json();
     setEmployees(data);
   };
 
+  // Add a new employee
   const addEmployee = async (employee) => {
-    const response = await fetch('http://localhost:5000/api/employees', {
+    const response = await fetch(backendUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(employee),
@@ -26,8 +31,9 @@ const App = () => {
     setEmployees([...employees, newEmployee]);
   };
 
+  // Update an existing employee
   const updateEmployee = async (id, updatedEmployee) => {
-    await fetch(`http://localhost:5000/api/employees/${id}`, {
+    await fetch(`${backendUrl}/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(updatedEmployee),
@@ -35,8 +41,9 @@ const App = () => {
     fetchEmployees();
   };
 
+  // Delete an employee
   const deleteEmployee = async (id) => {
-    await fetch(`http://localhost:5000/api/employees/${id}`, {
+    await fetch(`${backendUrl}/${id}`, {
       method: 'DELETE',
     });
     setEmployees(employees.filter((employee) => employee._id !== id));
